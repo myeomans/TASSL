@@ -8,7 +8,7 @@
 #####################################################
 
 # Review data
-rev_med<-readRDS("rev_med.RDS") %>%
+rev_med<-readRDS("data/rev_med.RDS") %>%
   filter(str_count(text,"[[:alpha:]]+")>25)
 
 # note - this makes the "random" splits identical for all of us, so we get the same results
@@ -294,7 +294,7 @@ rev_topicMod20<-stm(rev_med_dfm_train,K=20)
 saveRDS(rev_topicMod20,file="rev_topicMod20.RDS")
 
 
-rev_topicMod20<-readRDS("rev_topicMod20.RDS")
+rev_topicMod20<-readRDS("data/rev_topicMod20.RDS")
 
 topicNum=rev_topicMod20$settings$dim$K
 

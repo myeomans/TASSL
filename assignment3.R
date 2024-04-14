@@ -14,7 +14,7 @@ source("vectorFunctions.R") # a new one!
 # The real word vector files are ~ 6GB - too big for dropbox! 
 # This is a smaller version,
 # containing only the 50,000 most common words
-vecSmall<-readRDS("vecSmall.RDS")
+vecSmall<-readRDS("data/vecSmall.RDS")
 
 # You can download the full version from here if you like
 # https://dl.fbaipublicfiles.com/fasttext/vectors-english/crawl-300d-2M.vec.zip
@@ -29,7 +29,7 @@ vecSmall<-readRDS("vecSmall.RDS")
 head(vecSmall)
 
 # Word frequency file - to reweight common words
-load("wfFile.RData")
+load("data/wfFile.RData")
 
 # one column with words, and 300 with vector projections (uninterpretable!)
 head(vecSmall[,1:20])
@@ -63,7 +63,7 @@ vecSimCalc(x=c("I am very sad","I am very happy"),
 ###################################
 set.seed(2022)
 
-rev_med<-readRDS(file="rev_med.RDS")
+rev_med<-readRDS("data/rev_med.RDS")
 
 train_split=sample(1:nrow(rev_med),9000)
 

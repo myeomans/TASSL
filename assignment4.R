@@ -9,9 +9,9 @@
 
 
 
-ecMain<-readRDS("earningsDat.RDS")
+ecMain<-readRDS("data/earningsDat.RDS")
 
-ecQA<-readRDS("earningsQandA.RDS") %>%
+ecQA<-readRDS("data/earningsQandA.RDS") %>%
   mutate(wordcount=str_count(text,"[[:alpha:]]+"))
 
 # filter the Q&A to match the filtering on the main dataset

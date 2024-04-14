@@ -23,6 +23,7 @@ library(spacyr) #  for grammar parsing
 library(politeness) # dialogue acts
 library(stm) # topic models
 
+# functions we use more than once have their own scripts
 source("TASSL_dfm.R")
 source("kendall_acc.R")
 

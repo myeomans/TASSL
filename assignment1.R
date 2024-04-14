@@ -190,10 +190,10 @@ ngramTokens(dox)
 ######### New data - restaurant reviews
 
 # Review data
-review_dat<-readRDS("review_dat.RDS")
+review_dat<-readRDS("data/review_dat.RDS")
 
 # Business data
-businesses<-readRDS("businessset.RDS")
+businesses<-readRDS("data/businessset.RDS")
 # First thing - check variables
 
 names(review_dat)
@@ -454,7 +454,7 @@ plotDat %>%
 #################################################
 
 # new data! let's explore
-glassdoor<-readRDS("glassdoorReviews.RDS")
+glassdoor<-readRDS("data/glassdoorReviews.RDS")
 
 
 # Only a few companies in this data
