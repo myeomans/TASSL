@@ -24,7 +24,7 @@ TASSL_dfm<-function(text,
     stop("Must input character vector")
   }
   drop_list=""
-  #uses stop.words arugment to adjust what is dropped
+  #uses stop.words argument to adjust what is dropped
   if(stop.words) drop_list=stopwords("en") 
   # quanteda pipeline
   text_data<-text %>%

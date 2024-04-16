@@ -18,10 +18,13 @@ library(textclean) # extra pre-processing
 library(ggrepel) # for plots
 library(glmnet) # Our estimation model
 library(pROC)  # binary prediction accuracy
+library(doc2concrete) # ngramTokens
 library(sentimentr) # sentiment
 library(spacyr) #  for grammar parsing
 library(politeness) # dialogue acts
 library(stm) # topic models
+library(semgram) # motif analysis
+
 
 # functions we use more than once have their own scripts
 source("TASSL_dfm.R")

@@ -8,20 +8,7 @@
 #####################################################
 
 
-
-# Run these every time
-library(quanteda)
-library(ggrepel)
-library(textclean)
-library(tidyverse)
-library(glmnet)
-library(spacyr) 
-library(politeness)
-
 source("vectorFunctions.R")
-source("TASSL_dfm.R")
-
-source("kendall_acc.R")
 
 # The real word vector files are ~ 6GB - too big! This is a smaller version,
 # containing only the 50,000 most common words

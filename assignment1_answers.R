@@ -87,6 +87,11 @@ test_predict_binary=ifelse(test_predict>median(test_predict),
 
 round(100*mean(test_predict_binary==testY),3)
 
+
+pROC::roc(testY,test_predict,ci=T)
+
+plot(pROC::roc(testY,test_predict,ci=T))
+
 #####################
 # Build a plot
 #####################
@@ -130,7 +135,6 @@ plotDat %>%
 # NEXT, THE STAR RATING MODEL
 ###############################################################
 
-# it's five levels, not two! So let's convert to a binary split 
 hist(review_dat$stars)
 
 
@@ -167,6 +171,11 @@ test_predict_binary=ifelse(test_predict>median(test_predict),
 # calculate accuracy
 
 round(100*mean(test_predict_binary==testY),3)
+
+pROC::roc(testY,test_predict,ci=T)
+
+plot(pROC::roc(testY,test_predict,ci=T))
+
 
 #####################
 # Build a plot

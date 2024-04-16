@@ -179,7 +179,6 @@ library(doc2concrete)
 
 ngramTokens(dox)
 
-
 #################################################
 #################################################
 # Part 2 - Yelp data
@@ -436,7 +435,7 @@ plotDat %>%
                         midpoint = 0)+
   geom_vline(xintercept=0)+
   geom_point() +
-  geom_label_repel(max.overlaps = 15)+  
+  geom_label_repel(max.overlaps = 50)+  
   scale_x_continuous(limits = c(-.2,.1),
                      breaks = seq(-.2,.2,.05)) +
   scale_y_continuous(trans="log2",
@@ -595,7 +594,8 @@ pros_acc
 
 # Let's apply the same model to the cons text
 
-dfm_amazon_test_cons<-TASSL_dfm(gd_amazon_test$cons,ngrams=1:2)  %>%
+dfm_amazon_test_cons<-TASSL_dfm(gd_amazon_test$cons,ngrams=1:2,
+                                min.prop = 0)  %>%
   dfm_match(colnames(dfm_amazon_train_pros)) %>%
   convert(to="matrix")
 
