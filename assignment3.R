@@ -245,6 +245,13 @@ kendall_acc(rev_med_train$LMsentiment,
 c("this is a bad product","this is not a bad product") %>%
   sentiment_by(polarity_dt=lexicon::hash_sentiment_loughran_mcdonald) 
 
+
+c("this is a bad product","this is a very bad product",
+  "this is a slightly bad product",
+  "this is not a bad product") %>%
+  sentiment_by(polarity_dt=lexicon::hash_sentiment_loughran_mcdonald) 
+
+
 c("this is a bad product","this is not a bad product") %>%
   tokens() %>%
   dfm() %>%
@@ -270,8 +277,9 @@ spacyr::spacy_initialize()
 rev_med_train_polite<-politeness(rev_med_train$text,parser="spacy")
 
 politenessPlot(rev_med_train_polite,
-               cfpb_small_test$disputed,
-               middle_out = .05)
+               rev_med_train$stars,
+               middle_out = .05) +
+  theme(panel.grid = element_blank())
 
 
 rev_tiny <- rev_med %>%
@@ -444,7 +452,7 @@ rev_ner_docs<-rev_sp_ner %>%
 # extract all the common noun phrases
 phrases<-TASSL_dfm(rev_ner_docs$text,
                  min.prop = .001) %>%
-  as.data.frame() %>%
+  convert(to="data.frame") %>%
   select(contains("_"),-doc_id) %>%
   colMeans() %>%
   sort(decreasing = T) %>%
