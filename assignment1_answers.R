@@ -98,7 +98,7 @@ plot(pROC::roc(testY,test_predict,ci=T))
 
 # extract coefficients
 plotCoefs<-lasso_model %>%
-  coef() %>%
+  coef(s="lambda.min") %>%
   drop() %>%
   as.data.frame() %>%
   rownames_to_column(var = "ngram") %>%
@@ -121,7 +121,7 @@ plotDat %>%
   geom_vline(xintercept=0)+
   geom_point() +
   geom_label_repel(max.overlaps = 15)+  
-  scale_x_continuous(limits = c(-.2,.25),
+  scale_x_continuous(#limits = c(-.2,.25),
                      breaks = seq(-.2,.2,.1)) +
   scale_y_continuous(trans="log2",
                      breaks=c(.01,.05,.1,.2,.5,1,2,5))+

@@ -118,6 +118,7 @@ miss_high<-rev_med_test %>%
 
 miss_low<-rev_med_test %>%
   arrange(-bias) %>%
+  filter(stars==5) %>%
   slice(1:10) %>%
   select(text,stars,prediction)
 
@@ -152,7 +153,7 @@ rev_med_test <- rev_med_test %>%
          sentiment=sentiment_by(text)$ave_sentiment)
 
 acc_wdct<-kendall_acc(rev_med_test$stars,
-                      rev_med_test$text_wdct)
+                      -rev_med_test$text_wdct)
 
 acc_wdct
 
@@ -176,7 +177,7 @@ acc_sentiment
 # the categories are in a text field, so we need to extract them - with dfm!
 
 train_cats<-TASSL_dfm(rev_med_train$categories)%>%
-  as_tibble() %>%
+  convert("data.frame") %>%
   select(chines,sandwich,nightlif,mexican) 
 
 # 4432 that are in only one category ... let's dump the rest
@@ -195,7 +196,7 @@ table(one_cat_train$category)
 
 # do the same in the test set
 test_cats<-TASSL_dfm(rev_med_test$categories)%>%
-  as_tibble() %>%
+  convert("data.frame") %>%
   select(chines,sandwich,nightlif,mexican) 
 
 
@@ -274,6 +275,13 @@ table(rowSums(rev_med_dfm_train)==0)
 rev_med_train<-rev_med_train[rowSums(rev_med_dfm_train)!=0,]
 rev_med_dfm_train<-rev_med_dfm_train[rowSums(rev_med_dfm_train)!=0,]
 
+table(rowSums(rev_med_dfm_test)==0)
+
+# You should remove it first, before estimating 
+rev_med_test<-rev_med_test[rowSums(rev_med_dfm_test)!=0,]
+rev_med_dfm_test<-rev_med_dfm_test[rowSums(rev_med_dfm_test)!=0,]
+
+
 # Train a 20-topic model
 rev_topicMod20<-stm(rev_med_dfm_train,K=20)
 
@@ -321,7 +329,7 @@ labelTopics(rev_topicMod20)
 
 findThoughts(model=rev_topicMod20,
              texts=rev_med_train$text,
-             topics=15,n = 1)
+             topics=1,n = 5)
 
 # We can even put them in a word cloud! If you fancy it
 
@@ -356,32 +364,46 @@ bind_rows(lapply(summary(stmEffects)$tables,function(x) x[2,1:2])) %>%
   theme(panel.grid=element_blank(),
         axis.text=element_text(size=20))
 
-
-
-
-# This contains the topic proportions for each document..
-topic_prop_train<-rev_topicMod20$theta
-dim(topic_prop_train)
-colnames(topic_prop_train)<-topicNames
-
-# We can use these topic proportions just like any other feature
-rev_model_stm<-glmnet::cv.glmnet(x=topic_prop_train,
-                                y=rev_med_train$stars)
-
-# Note that we didn't give enough features... there is no U shape
-plot(rev_model_stm)
-
-topic_prop_test<-fitNewDocuments(rev_topicMod20,
-                                 rev_med_dfm_test %>%
-                                   convert(to="stm") %>%
-                                   `$`(documents))
-
-
-test_stm_predict<-predict(rev_model_stm,
-                          newx = topic_prop_test$theta)[,1]
-
-# Note the drop in performance, compared to the ngrams
-acc_stm<-kendall_acc(rev_med_test$stars,test_stm_predict)
-
-acc_stm
-
+# Update to their package means this isn't working... 
+#
+# but you shouldn't use it anyways 
+# 
+# # This contains the topic proportions for each document..
+# topic_prop_train<-rev_topicMod20$theta
+# dim(topic_prop_train)
+# colnames(topic_prop_train)<-topicNames
+# 
+# # We can use these topic proportions just like any other feature
+# rev_model_stm<-glmnet::cv.glmnet(x=topic_prop_train,
+#                                 y=rev_med_train$stars)
+# 
+# # Note that we didn't give enough features... there is no U shape
+# plot(rev_model_stm)
+# 
+# rev_med_dfm_test
+# 
+# 
+# rev_med_dfm_tp<-textProcessor(rev_med_test$text)
+# 
+# rev_med_dfm_pd<-prepDocuments(rev_med_dfm_tp$documents,
+#                               rev_med_dfm_tp$vocab)
+# 
+# rev_med_dfm_ac<-alignCorpus(rev_med_dfm_pd,
+#                             old.vocab=colnames(rev_med_dfm_train))
+#                      
+# 
+# # 
+# topic_prop_test<-fitNewDocuments(rev_topicMod20,
+#                                  rev_med_dfm_test %>%
+#                                    convert(to="stm") %>%
+#                                    `$`(documents))
+# 
+# 
+# test_stm_predict<-predict(rev_model_stm,
+#                           newx = topic_prop_test$theta)[,1]
+# 
+# # Note the drop in performance, compared to the ngrams
+# acc_stm<-kendall_acc(rev_med_test$stars,test_stm_predict)
+# 
+# acc_stm
+# 
