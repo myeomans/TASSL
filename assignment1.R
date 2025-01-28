@@ -6,6 +6,13 @@
 #                                                   #
 #                                                   #
 #####################################################
+library(tidyverse) # useful for almost everything
+library(quanteda) # text analysis workhorse
+library(textclean) # extra pre-processing
+library(ggrepel) # for plots
+library(glmnet) # Our estimation model
+library(pROC)  # binary prediction accuracy
+library(doc2concrete) # ngramTokens
 
 
 #################################################
@@ -586,6 +593,8 @@ hist(amazon_test_predict_pros)
 hist(amazon_test_Y)
 
 # estimate accuracy - use kendall's tau
+source("kendall_acc.R")
+
 pros_acc<-kendall_acc(amazon_test_predict_pros,amazon_test_Y)
 
 pros_acc
