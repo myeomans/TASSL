@@ -174,6 +174,8 @@ acc_sentiment
 # extract dictionary the normal way
 #############################################
 
+loughran_words<-textdata::lexicon_loughran()
+
 # Traditional dictionary approach using dfm_lookup()
 rev_med_train_dicts<-rev_med_train %>%
   pull(text) %>%
