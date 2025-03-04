@@ -170,6 +170,64 @@ acc_sentiment<-kendall_acc(rev_med_test$stars,
 acc_sentiment
 
 
+#############################################
+# extract dictionary the normal way
+#############################################
+
+# Traditional dictionary approach using dfm_lookup()
+rev_med_train_dicts<-rev_med_train %>%
+  pull(text) %>%
+  tokens() %>%
+  dfm() %>%
+  dfm_lookup(as.dictionary(loughran_words)) %>%
+  convert(to="data.frame")
+
+
+# all the dictionaries are in there!
+head(rev_med_train_dicts)
+
+# usually you want to divide by the word count
+rev_med_train_dicts<-rev_med_train_dicts %>%
+  select(-doc_id) %>%
+  mutate_all(~./rev_med_train$word_count)
+
+# Accuracy score using traditional dictionary
+kendall_acc(rev_med_train_dicts$positive,
+            rev_med_train$stars)
+
+########################################################
+# using L&M dictionary with grammar awareness
+########################################################
+
+rev_med_train_dicts<-rev_med_train_dicts %>%
+  mutate(sentiment=positive-negative)
+
+kendall_acc(rev_med_train_dicts$sentiment,
+            rev_med_train$stars)
+
+rev_med_train<-rev_med_train %>%
+  mutate(LMsentiment=sentiment_by(text,
+                                  polarity_dt=lexicon::hash_sentiment_loughran_mcdonald) %>%
+           pull(ave_sentiment))
+
+kendall_acc(rev_med_train$LMsentiment,
+            rev_med_train$stars)
+
+# examples - 
+c("this is a bad product","this is not a bad product") %>%
+  sentiment_by(polarity_dt=lexicon::hash_sentiment_loughran_mcdonald) 
+
+
+c("this is a bad product","this is a very bad product",
+  "this is a slightly bad product",
+  "this is not a bad product") %>%
+  sentiment_by(polarity_dt=lexicon::hash_sentiment_loughran_mcdonald) 
+
+
+c("this is a bad product","this is not a bad product") %>%
+  tokens() %>%
+  dfm() %>%
+  dfm_lookup(as.dictionary(loughran_words))
 
 ######################################################################
 # A multinomial classifier example
