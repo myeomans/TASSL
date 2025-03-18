@@ -35,6 +35,9 @@ spacyr::spacy_initialize()
 
 rev_med_train_polite<-politeness(rev_med_train$text,parser="spacy")
 
+saveRDS(rev_med_train_polite,file="rev_med_train_polite.RDS")
+rev_med_train_polite<-readRDS("rev_med_train_polite.RDS")
+
 politenessPlot(rev_med_train_polite,
                rev_med_train$stars,
                middle_out = .05) +
